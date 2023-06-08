@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import { useCallback, useEffect, useState } from "react";
@@ -15,9 +15,14 @@ import AuthSocialButton from "./AuthSocialButton";
 type Variant = "LOGIN" | "REGISTER";
 
 const AuthForm: React.FC = () => {
+  const searchParams = useSearchParams();
   const session = useSession();
   const router = useRouter();
-  const [variant, setVariant] = useState<Variant>("LOGIN");
+
+  const isRegister = searchParams?.get("register");
+  const [variant, setVariant] = useState<Variant>(
+    isRegister ? "REGISTER" : "LOGIN"
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -29,10 +34,12 @@ const AuthForm: React.FC = () => {
   const toggleVariant = useCallback(() => {
     if (variant === "LOGIN") {
       setVariant("REGISTER");
+      router.push("/?register=true");
     } else {
       setVariant("LOGIN");
+      router.push("/");
     }
-  }, [variant]);
+  }, [variant, router]);
 
   const {
     register,
@@ -95,8 +102,8 @@ const AuthForm: React.FC = () => {
   };
 
   return (
-    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+    <div className="mt-5 sm:mt-8 flex-1 max-w-md">
+      <div className="bg-white py-8 shadow rounded-lg px-10">
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {variant === "REGISTER" && (
             <Input
@@ -140,7 +147,7 @@ const AuthForm: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-6 flex gap-2">
+          <div className="mt-6 flex flex-col xs:flex-row gap-2">
             <AuthSocialButton
               icon={BsGithub}
               onClick={() => socialAction("github")}
@@ -152,14 +159,14 @@ const AuthForm: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
-          <div>
+          <span>
             {variant === "LOGIN"
               ? "New to Messenger?"
               : "Already have an account"}
-          </div>
-          <div onClick={toggleVariant} className="underline cursor-pointer">
+          </span>
+          <span onClick={toggleVariant} className="underline cursor-pointer">
             {variant == "LOGIN" ? "Create an account" : "Login"}
-          </div>
+          </span>
         </div>
       </div>
     </div>

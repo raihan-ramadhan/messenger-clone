@@ -14,6 +14,7 @@ const LayoutUsers = async ({
     //@ts-expect-error Server Component
     <Sidebar>
       <ConversationList users={users} initialItems={conversation} />
+
       <div className="h-full">{children}</div>
     </Sidebar>
   );

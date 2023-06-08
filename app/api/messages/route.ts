@@ -18,25 +18,16 @@ export async function POST(request: Request) {
         body: message,
         image: image,
         conversation: {
-          connect: {
-            id: conversationId,
-          },
+          connect: { id: conversationId },
         },
         sender: {
-          connect: {
-            id: currentUSer.id,
-          },
+          connect: { id: currentUSer.id },
         },
         seen: {
-          connect: {
-            id: currentUSer.id,
-          },
+          connect: { id: currentUSer.id },
         },
       },
-      include: {
-        seen: true,
-        sender: true,
-      },
+      include: { seen: true, sender: true },
     });
 
     const updatedConversation = await prisma.conversation.update({

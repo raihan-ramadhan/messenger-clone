@@ -6,20 +6,25 @@ import Link from "next/link";
 interface MobileItemProps {
   icon: any;
   href: string;
-  label: string;
   active?: boolean;
   onClick?: () => void;
 }
 
 const MobileItem: React.FC<MobileItemProps> = ({
-  href,
   icon: Icon,
-  label,
-  active,
   onClick,
+  active,
+  href,
 }) => {
+  const handleClick = () => {
+    if (onClick) {
+      return onClick();
+    }
+  };
+
   return (
     <Link
+      onClick={handleClick}
       href={href}
       className={cn(
         "group flex gap-x-3 text-sm leading-6 font-semibold w-full justify-center p-4 text-gray-500 hover:text-black hover:bg-gray-100",

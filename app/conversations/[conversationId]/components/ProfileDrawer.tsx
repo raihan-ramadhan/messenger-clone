@@ -45,7 +45,10 @@ const ProfileDrawer: React.FC<ProfileDrawer> = ({ data, isOpen, onClose }) => {
     <>
       <ConfirmModal
         isOpen={confirmOpen}
-        onClose={() => setConfirmOpen(false)}
+        onClose={() => {
+          setConfirmOpen(false);
+          onClose();
+        }}
       />
 
       <Transition.Root show={isOpen} as={Fragment}>

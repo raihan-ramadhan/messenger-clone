@@ -31,8 +31,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
   const body = cn("flex flex-col gap-2", isOwn && "items-end");
   const message = cn(
     "text-sm w-fit overflow-hidden",
-    isOwn ? "bg-sky-500 text-white" : "bg-gray-100",
-    data.image ? "rounded-md p-0" : "rounded-full py-2 px-3"
+    isOwn ? "bg-sky-500 text-white" : "bg-gray-100"
   );
 
   return (
@@ -47,13 +46,13 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
             {format(new Date(data.createdAt), "p")}
           </div>
         </div>
-        <div className={message}>
-          <ImageModal
-            isOpen={imageModalOpen}
-            onClose={() => setImageModalOpen(false)}
-            src={data.image}
-          />
-          {data.image ? (
+        {!!data.image && (
+          <div className={cn(message, "rounded-md p-0")}>
+            <ImageModal
+              isOpen={imageModalOpen}
+              onClose={() => setImageModalOpen(false)}
+              src={data.image}
+            />
             <Image
               onClick={() => setImageModalOpen(true)}
               alt="Image"
@@ -62,10 +61,13 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
               src={data.image}
               className="object-cover cursor-pointer hover:scale-110 transition translate"
             />
-          ) : (
-            <div>{data.body}</div>
-          )}
-        </div>
+          </div>
+        )}
+        {data.body && (
+          <div className={cn(message, "rounded-full py-2 px-3")}>
+            {data.body}
+          </div>
+        )}
         {isLast && isOwn && seenList.length > 0 && (
           <div className="text-xs font-light text-gray-500">{`Seen by ${seenList}`}</div>
         )}

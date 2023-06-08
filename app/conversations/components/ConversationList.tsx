@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import { useEffect, useMemo, useState } from "react";
+import { Suspense } from "react";
 
 import useConversation from "@/app/hooks/useConversation";
 import ConversationBox from "./ConversationBox";
@@ -101,11 +102,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
             </div>
           </div>
           {items.map((item) => (
-            <ConversationBox
+            <Suspense
               key={item.id}
-              data={item}
-              selected={conversationId === item.id}
-            />
+              fallback={<p>Loading ConversationBox...</p>}
+            >
+              <ConversationBox
+                data={item}
+                selected={conversationId === item.id}
+              />
+            </Suspense>
           ))}
         </div>
       </aside>
